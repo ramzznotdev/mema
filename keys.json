@@ -23,6 +23,14 @@
       "maxAdd": 1,
       "role": "user",
       "created": "2026-04-23T22:51:37.489Z"
+    },
+    {
+      "key": "FREE-MOC2UI4C-HHD5",
+      "name": "usjs",
+      "expired": "2026-04-24",
+      "maxAdd": 1,
+      "role": "user",
+      "created": "2026-04-23T22:52:43.719Z"
     }
   ]
 }
