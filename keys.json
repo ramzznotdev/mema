@@ -1,12 +1,10 @@
 {
     "keys": [
         {
-            "key": "RAMZZ-GANTENG01",
+            "key": "ADMIN-2024-RAMZZ",
             "name": "Ramzz Admin",
-            "expired": "Unlimited",
             "maxAdd": 999,
-            "role": "admin",
-            "created": "2024-01-01T00:00:00.000Z"
+            "role": "admin"
         }
     ]
 }
