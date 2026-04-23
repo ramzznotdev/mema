@@ -1,68 +1,12 @@
 {
-  "keys": [
-    {
-      "key": "RAMZZ-GANTENG01",
-      "name": "Ramzz",
-      "expired": "Unlimited",
-      "maxAdd": 999,
-      "role": "admin",
-      "created": "2024-01-01T00:00:00.000Z"
-    },
-    {
-      "key": "FREE-LH7K-9X2M",
-      "name": "User Gratis 1",
-      "expired": "2026-04-25",
-      "maxAdd": 1,
-      "role": "user",
-      "created": "2026-04-24T10:00:00.000Z"
-    },
-    {
-      "key": "FREE-MOC2T3PO-JG0F",
-      "name": "lah",
-      "expired": "2026-04-24",
-      "maxAdd": 1,
-      "role": "user",
-      "created": "2026-04-23T22:51:37.489Z"
-    },
-    {
-      "key": "FREE-MOC2UI4C-HHD5",
-      "name": "usjs",
-      "expired": "2026-04-24",
-      "maxAdd": 1,
-      "role": "user",
-      "created": "2026-04-23T22:52:43.719Z"
-    },
-    {
-      "key": "FREE-MOC3B27C-X029",
-      "name": "mama",
-      "expired": "2026-04-24",
-      "maxAdd": 1,
-      "role": "user",
-      "created": "2026-04-23T23:05:35.848Z"
-    },
-    {
-      "key": "FREE-MOC3B4CH-A8HR",
-      "name": "mama",
-      "expired": "2026-04-24",
-      "maxAdd": 1,
-      "role": "user",
-      "created": "2026-04-23T23:05:38.228Z"
-    },
-    {
-      "key": "FREE-MOC3BCEW-N9BF",
-      "name": "mema",
-      "expired": "2026-04-24",
-      "maxAdd": 1,
-      "role": "user",
-      "created": "2026-04-23T23:05:49.092Z"
-    },
-    {
-      "key": "FREE-MOC43SFM-AUMQ",
-      "name": "jsjw",
-      "expired": "2026-04-24",
-      "maxAdd": 1,
-      "role": "user",
-      "created": "2026-04-23T23:27:55.627Z"
-    }
-  ]
+    "keys": [
+        {
+            "key": "RAMZZ-GANTENG01",
+            "name": "Ramzz Admin",
+            "expired": "Unlimited",
+            "maxAdd": 999,
+            "role": "admin",
+            "created": "2024-01-01T00:00:00.000Z"
+        }
+    ]
 }
