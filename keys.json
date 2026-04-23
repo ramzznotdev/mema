@@ -1,10 +1,16 @@
 {
-    "keys": [
-        {
-            "key": "ADMIN-2024-RAMZZ",
-            "name": "Ramzz Admin",
-            "maxAdd": 999,
-            "role": "admin"
-        }
-    ]
+  "keys": [
+    {
+      "key": "ADMIN-2024-RAMZZ",
+      "name": "Ramzz Admin",
+      "maxAdd": 999,
+      "role": "admin"
+    },
+    {
+      "key": "FREE-MOC4J28G-03H3",
+      "name": "tama",
+      "maxAdd": 1,
+      "role": "user"
+    }
+  ]
 }
