@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>RAMZZ CHANNEL MANAGER | WhatsApp Channel Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #020312;
+            --surface: rgba(8, 14, 30, 0.85);
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text: #f1f5f9;
+            --dim: rgba(255, 255, 255, 0.45);
+            --border: rgba(99, 102, 241, 0.25);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .overlay-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(2, 3, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 30px;
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        .logo h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: var(--dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-link.login-btn {
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            color: #fff;
+        }
+
+        .nav-link.login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-link.register-btn {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .nav-link.register-btn:hover {
+            background: var(--secondary);
+            color: #fff;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            max-width: 300px;
+            height: 100vh;
+            background: rgba(8, 14, 30, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 99;
+            padding: 80px 20px 20px;
+            transition: right 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+            border-left: 1px solid var(--border);
+        }
+
+        .mobile-menu.active { right: 0; }
+        .mobile-menu .nav-link { display: block; margin: 15px 0; text-align: center; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            padding: 100px 30px 60px;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 60px;
+            font-size: 0.8rem;
+            color: var(--primary-light);
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--dim);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 60px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            color: #fff;
+        }
+
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4); }
+
+        .btn-outline {
+            border: 2px solid var(--border);
+            background: transparent;
+            color: var(--text);
+        }
+
+        .btn-outline:hover { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 60px 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .section-title p { color: var(--dim); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+        }
+
+        .stat-label {
+            color: var(--dim);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .stat-refresh {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: var(--dim);
+        }
+
+        .stat-refresh i { color: var(--primary); }
+
+        /* Features */
+        .features-section {
+            padding: 60px 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(99, 102, 241, 0.15);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .feature-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+        .feature-card p { color: var(--dim); font-size: 0.9rem; line-height: 1.5; }
+
+        /* CTA */
+        .cta-section {
+            padding: 80px 30px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-card h2 { font-size: 1.8rem; margin-bottom: 15px; }
+        .cta-card p { color: var(--dim); margin-bottom: 25px; }
+
+        /* Footer */
+        .footer {
+            padding: 40px 30px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p { color: var(--dim); font-size: 0.8rem; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 35px;
+            max-width: 450px;
+            width: 90%;
+            animation: popIn 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal h3 {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .modal .input-wrap { margin-bottom: 15px; }
+        .modal .input-wrap input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            color: #fff;
+            outline: none;
+        }
+        .modal .input-wrap input:focus { border-color: var(--primary); }
+        .modal .btn { width: 100%; justify-content: center; margin-top: 10px; }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            color: var(--dim);
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero h1 { font-size: 2.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .hamburger { display: flex; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero { padding: 120px 20px 60px; }
+            .cta-card { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+<div class="overlay-glow"></div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            <h1>RAMZZ</h1>
+        </div>
+        <div class="nav-menu">
+            <a class="nav-link" onclick="scrollToTop()">Beranda</a>
+            <a class="nav-link" onclick="scrollToStats()">Statistik</a>
+            <a class="nav-link" onclick="scrollToFeatures()">Fitur</a>
+            <a class="nav-link login-btn" onclick="showLoginModal()"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a class="nav-link register-btn" onclick="showRegisterModal()"><i class="fas fa-gift"></i> Register</a>
+        </div>
+        <div class="hamburger" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a class="nav-link" onclick="closeMobileMenu();scrollToTop()">🏠 Beranda</a>
+    <a class="nav-link" onclick="closeMobileMenu();scrollToStats()">📊 Statistik</a>
+    <a class="nav-link" onclick="closeMobileMenu();scrollToFeatures()">⚡ Fitur</a>
+    <a class="nav-link login-btn" onclick="closeMobileMenu();showLoginModal()"><i class="fas fa-sign-in-alt"></i> Login</a>
+    <a class="nav-link register-btn" onclick="closeMobileMenu();showRegisterModal()"><i class="fas fa-gift"></i> Register</a>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-circle" style="font-size: 8px; color: #10b981; margin-right: 6px;"></i>
+            LIVE FROM GITHUB • REALTIME
+        </div>
+        <h1>Channel Manager<br>WhatsApp Premium</h1>
+        <p>Kelola channel WhatsApp newsletter dengan mudah. Data tersimpan aman di GitHub dan bisa diakses realtime.</p>
+        <div class="hero-buttons">
+            <a class="btn btn-primary" onclick="showLoginModal()"><i class="fas fa-rocket"></i> Mulai Sekarang</a>
+            <a class="btn btn-outline" onclick="scrollToStats()"><i class="fas fa-chart-line"></i> Lihat Statistik</a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section" id="statsSection">
+    <div class="section-title">
+        <h2>📊 STATISTIK PLATFORM</h2>
+        <p>Data diambil langsung dari GitHub (realtime)</p>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-value" id="statTotalUsers">0</div>
+            <div class="stat-label">Total Pengguna</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fab fa-whatsapp"></i></div>
+            <div class="stat-value" id="statTotalChannels">0</div>
+            <div class="stat-label">Total Channel</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-key"></i></div>
+            <div class="stat-value" id="statTotalKeys">0</div>
+            <div class="stat-label">Total Key Aktif</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="stat-value" id="statAvgChannel">0</div>
+            <div class="stat-label">Rata2 Channel/User</div>
+        </div>
+    </div>
+    <div class="stat-refresh">
+        <i class="fas fa-sync-alt"></i> Auto refresh setiap 30 detik | 
+        <a onclick="refreshStats()" style="color: var(--primary); cursor: pointer;">Refresh manual</a>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features-section" id="featuresSection">
+    <div class="section-title">
+        <h2>⚡ FITUR UNGGULAN</h2>
+        <p>Kenapa harus pakai RAMZZ Channel Manager?</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-bolt"></i></div><h3>Proses Cepat</h3><p>Add channel WhatsApp instan, tanpa delay. Sistem realtime.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><h3>Aman & Terenkripsi</h3><p>Data channel dienkripsi dan backup otomatis ke GitHub.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-infinity"></i></div><h3>Tanpa Batas</h3><p>User premium bisa add unlimited channel (tergantung limit key).</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-chart-simple"></i></div><h3>Statistik Lengkap</h3><p>Pantau total channel, user, dan analisis penggunaan realtime.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-database"></i></div><h3>Backup Otomatis</h3><p>Data tersimpan aman di GitHub. Bisa restore kapan saja.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-mobile-alt"></i></div><h3>Mobile Friendly</h3><p>Akses panel dari HP dengan tampilan responsif.</p></div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="cta-card">
+        <h2>🚀 Siap Mengelola Channel WhatsApp?</h2>
+        <p>Daftar sekarang dan dapatkan key gratis untuk mencoba semua fitur!</p>
+        <a class="btn btn-primary" onclick="showRegisterModal()"><i class="fas fa-gift"></i> Daftar Sekarang</a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© 2024 RAMZZ HOSTING • Channel Manager WhatsApp • Data sync with GitHub</p>
+</footer>
+
+<!-- Modal Login -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal">
+        <div class="modal-close" onclick="closeLoginModal()"><i class="fas fa-times"></i></div>
+        <h3>🔐 LOGIN PANEL</h3>
+        <p style="text-align:center; font-size:12px; color:var(--dim); margin-bottom:20px">Masukkan key Anda</p>
+        <div class="input-wrap">
+            <input type="text" id="loginKeyInput" placeholder="Masukkan Key">
+        </div>
+        <button class="btn btn-primary" onclick="processLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <div id="loginModalMsg" style="font-size:11px; text-align:center; margin-top:12px; color:#ef4444"></div>
+    </div>
+</div>
+
+<!-- Modal Register -->
+<div class="modal-overlay" id="registerModal">
+    <div class="modal">
+        <div class="modal-close" onclick="closeRegisterModal()"><i class="fas fa-times"></i></div>
+        <h3>🎁 CLAIM FREE KEY</h3>
+        <p style="text-align:center; font-size:12px; color:var(--dim); margin-bottom:20px">Dapatkan key gratis untuk mencoba panel</p>
+        <div class="input-wrap">
+            <input type="text" id="registerName" placeholder="Nama Anda">
+        </div>
+        <button class="btn btn-primary" onclick="processRegister()"><i class="fas fa-gift"></i> Claim Key</button>
+        <div id="registerModalMsg" style="font-size:11px; text-align:center; margin-top:12px; color:#ef4444"></div>
+    </div>
+</div>
+
+<!-- Modal Result Key -->
+<div class="modal-overlay" id="resultKeyModal">
+    <div class="modal">
+        <div class="modal-close" onclick="closeResultKeyModal()"><i class="fas fa-times"></i></div>
+        <h3>🎉 KEY ANDA!</h3>
+        <p style="text-align:center; font-size:12px; color:var(--dim); margin-bottom:15px">Simpan key ini, jangan sampai hilang!</p>
+        <div class="input-wrap">
+            <input type="text" id="resultKeyDisplay" readonly style="text-align:center; font-family:monospace">
+        </div>
+        <button class="btn btn-primary" onclick="copyResultKey()"><i class="fas fa-copy"></i> Copy Key</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    // ======================= KONFIGURASI GITHUB =======================
+    const GITHUB_CONFIG = {
+        token: "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",
+        username: "ramzznotdev",
+        repo: "mema",
+        branch: "main"
+    };
+
+    const FILES = { keys: "keys.json", channels: "channel.json", claims: "claims.json" };
+
+    let allKeys = [];
+    let allChannels = {};
+
+    // DEFAULT KEYS yang akan dibuat jika file kosong
+    const DEFAULT_KEYS = {
+        keys: [
+            { key: "ADMIN-2024-RAMZZ", name: "Ramzz Admin", maxAdd: 999, role: "admin" }
+        ]
+    };
+
+    async function fetchFromGitHub(fileName) {
+        const url = `https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/${fileName}`;
+        try {
+            const res = await fetch(url, { headers: { Authorization: `token ${GITHUB_CONFIG.token}`, Accept: "application/vnd.github.v3+json" } });
+            if (!res.ok) throw new Error(`Gagal fetch ${fileName}`);
+            const data = await res.json();
+            return JSON.parse(atob(data.content));
+        } catch (err) { return null; }
+    }
+
+    async function saveToGitHub(fileName, data, commitMsg) {
+        const url = `https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/${fileName}`;
+        try {
+            const getRes = await fetch(url, { headers: { Authorization: `token ${GITHUB_CONFIG.token}`, Accept: "application/vnd.github.v3+json" } });
+            let sha = null;
+            if (getRes.ok) { const fileData = await getRes.json(); sha = fileData.sha; }
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+            const body = { message: commitMsg, content: content, branch: GITHUB_CONFIG.branch };
+            if (sha) body.sha = sha;
+            const res = await fetch(url, { method: "PUT", headers: { Authorization: `token ${GITHUB_CONFIG.token}`, Accept: "application/vnd.github.v3+json", "Content-Type": "application/json" }, body: JSON.stringify(body) });
+            return res.ok;
+        } catch (err) { return false; }
+    }
+
+    async function initData() {
+        // Init keys.json dengan default admin jika kosong
+        let keysData = await fetchFromGitHub(FILES.keys);
+        if (!keysData || !keysData.keys || keysData.keys.length === 0) {
+            await saveToGitHub(FILES.keys, DEFAULT_KEYS, "Init default keys with admin");
+            keysData = DEFAULT_KEYS;
+        }
+        
+        // Init channels.json jika kosong
+        let channelsData = await fetchFromGitHub(FILES.channels);
+        if (!channelsData) {
+            await saveToGitHub(FILES.channels, { channels: {} }, "Init empty channels");
+        }
+        
+        // Init claims.json jika kosong
+        let claimsData = await fetchFromGitHub(FILES.claims);
+        if (!claimsData) {
+            await saveToGitHub(FILES.claims, {}, "Init empty claims");
+        }
+    }
+
+    async function loadStatsData() {
+        try {
+            const keysData = await fetchFromGitHub(FILES.keys);
+            if (keysData && keysData.keys) {
+                allKeys = keysData.keys;
+            } else {
+                allKeys = DEFAULT_KEYS.keys;
+            }
+
+            const channelsData = await fetchFromGitHub(FILES.channels);
+            if (channelsData && channelsData.channels) {
+                allChannels = channelsData.channels;
+            } else {
+                allChannels = {};
+            }
+
+            updateStatsDisplay();
+        } catch (err) {
+            console.error("Error loading stats:", err);
+        }
+    }
+
+    function updateStatsDisplay() {
+        const totalUsers = allKeys.length;
+        let totalChannels = 0;
+        allKeys.forEach(user => {
+            const userChannels = allChannels[user.key]?.list || [];
+            totalChannels += userChannels.length;
+        });
+        const avgChannel = totalUsers > 0 ? (totalChannels / totalUsers).toFixed(1) : 0;
+        
+        document.getElementById('statTotalUsers').innerText = totalUsers;
+        document.getElementById('statTotalChannels').innerText = totalChannels;
+        document.getElementById('statTotalKeys').innerText = totalUsers;
+        document.getElementById('statAvgChannel').innerText = avgChannel;
+    }
+
+    async function refreshStats() {
+        const refreshIcon = document.querySelector('.stat-refresh i');
+        refreshIcon.style.transform = 'rotate(360deg)';
+        refreshIcon.style.transition = 'transform 0.5s';
+        await loadStatsData();
+        setTimeout(() => { refreshIcon.style.transform = 'rotate(0deg)'; }, 500);
+    }
+
+    async function processLogin() {
+        const key = document.getElementById('loginKeyInput').value.trim();
+        const msgDiv = document.getElementById('loginModalMsg');
+        
+        if (!key) { msgDiv.innerText = '❌ Masukkan key!'; return; }
+        
+        await loadStatsData();
+        const found = allKeys.find(k => k.key === key);
+        
+        if (!found) { msgDiv.innerText = '❌ Key tidak valid!'; return; }
+        
+        localStorage.setItem('ramzz_current_user', JSON.stringify(found));
+        msgDiv.innerText = '✅ Login berhasil! Redirecting...';
+        msgDiv.style.color = '#10b981';
+        
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+    }
+
+    async function processRegister() {
+        const name = document.getElementById('registerName').value.trim();
+        const msgDiv = document.getElementById('registerModalMsg');
+        
+        if (!name) { msgDiv.innerText = '❌ Nama harus diisi!'; return; }
+        
+        let ip = 'unknown';
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            ip = data.ip;
+        } catch(e) { ip = 'ip_' + Date.now(); }
+        
+        await loadStatsData();
+        
+        const claimsKey = 'ramzz_claims_' + ip;
+        if (localStorage.getItem(claimsKey)) {
+            msgDiv.innerText = '❌ IP sudah pernah claim!';
+            return;
+        }
+        
+        const newKey = 'FREE-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
+        
+        allKeys.push({
+            key: newKey,
+            name: name,
+            maxAdd: 1,
+            role: 'user',
+            created_at: new Date().toISOString()
+        });
+        
+        const saveSuccess = await saveToGitHub(FILES.keys, { keys: allKeys }, `Add free key for ${name}`);
+        
+        if (!saveSuccess) { msgDiv.innerText = '❌ Gagal menyimpan key!'; return; }
+        
+        localStorage.setItem(claimsKey, JSON.stringify({ key: newKey, name: name, time: new Date().toISOString() }));
+        
+        closeRegisterModal();
+        document.getElementById('resultKeyDisplay').value = newKey;
+        document.getElementById('resultKeyModal').classList.add('show');
+        
+        await loadStatsData();
+        canvasConfetti({ particleCount: 200, spread: 80, origin: { y: 0.5 } });
+    }
+
+    function copyResultKey() {
+        const key = document.getElementById('resultKeyDisplay').value;
+        navigator.clipboard.writeText(key);
+        alert('✅ Key berhasil disalin!');
+    }
+
+    // ======================= MODAL =======================
+    function showLoginModal() { closeAllModals(); document.getElementById('loginModal').classList.add('show'); document.getElementById('loginKeyInput').value = ''; document.getElementById('loginModalMsg').innerText = ''; }
+    function closeLoginModal() { document.getElementById('loginModal').classList.remove('show'); }
+    function showRegisterModal() { closeAllModals(); document.getElementById('registerModal').classList.add('show'); document.getElementById('registerName').value = ''; document.getElementById('registerModalMsg').innerText = ''; }
+    function closeRegisterModal() { document.getElementById('registerModal').classList.remove('show'); }
+    function closeResultKeyModal() { document.getElementById('resultKeyModal').classList.remove('show'); }
+    function closeAllModals() { document.getElementById('loginModal').classList.remove('show'); document.getElementById('registerModal').classList.remove('show'); document.getElementById('resultKeyModal').classList.remove('show'); }
+
+    // ======================= NAVIGASI =======================
+    function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('active'); }
+    function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('active'); }
+    function scrollToTop() { closeMobileMenu(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    function scrollToStats() { closeMobileMenu(); document.getElementById('statsSection').scrollIntoView({ behavior: 'smooth' }); }
+    function scrollToFeatures() { closeMobileMenu(); document.getElementById('featuresSection').scrollIntoView({ behavior: 'smooth' }); }
+
+    // ======================= INIT =======================
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: '#6366f1' },
+            shape: { type: 'circle' },
+            opacity: { value: 0.2, random: true },
+            size: { value: 3, random: true },
+            line_linked: { enable: true, distance: 150, color: '#6366f1', opacity: 0.1, width: 1 },
+            move: { enable: true, speed: 1.5, direction: 'none', random: true, straight: false, out_mode: 'out' }
+        },
+        interactivity: {
+            detect_on: 'canvas',
+            events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true }
+        },
+        retina_detect: true
+    });
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('show'); });
+    });
+
+    // Init data dan load stats
+    initData().then(() => {
+        loadStatsData();
+        setInterval(loadStatsData, 30000);
+    });
+</script>
+</body>
+</html>
