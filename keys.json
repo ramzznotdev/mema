@@ -11,6 +11,13 @@
       "name": "RAMZZ HOSTING",
       "maxAdd": 10,
       "role": "user"
+    },
+    {
+      "key": "FREE-MOC6QHH9-O52A",
+      "name": "Ramzz",
+      "maxAdd": 1,
+      "role": "user",
+      "created_at": "2026-04-24T00:41:33.693Z"
     }
   ]
 }
