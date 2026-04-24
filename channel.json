@@ -1,3 +1,10 @@
 {
-    "channels": {}
+  "channels": {
+    "FREE-MOC4XOXF-U4C3": {
+      "name": "hs",
+      "list": [
+        "120363427081682554@newsletter"
+      ]
+    }
+  }
 }
